@@ -1,18 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Collapse, Button, Table } from "antd";
 import styled from "styled-components";
 import moment from "moment";
+import { ProfileOutlined, MailOutlined } from "@ant-design/icons";
+import { ORDER_ITEM_STATUS } from "../../modules/locale";
 
 const { Panel } = Collapse;
+
+const ITEM_STATUS_BG_COLOR = {
+  "Added": "#c1e4c1",
+  "Not Available": "red",
+  "Substituted": "yellow"
+};
 
 const OrderDetailsModal = ({
   onOrderBillOrShip,
   order = {},
   onclose
 }) => {
-  const { name, email, items, phone, pick_up_time, order_date } = order;
-  const onOrderItemClick = (item, index) => {
-    console.log(index)
+  const [items, setItems] = useState(order.items);
+  const { name, email, phone, pick_up_time, order_date } = order;
+
+  const onOrderItemClick = (item, rowIndex) => {
+    const currentStatusIndex = ORDER_ITEM_STATUS.indexOf(item.item_state);
+    const nextStatusIndex = currentStatusIndex !== -1 ? currentStatusIndex + 1 : 0;
+    const modifiedItems = items.map((i, index) => {
+      if (index === rowIndex) {
+        return {...item, item_state: ORDER_ITEM_STATUS[nextStatusIndex % ORDER_ITEM_STATUS.length]};
+      }
+      return i;
+    });
+    setItems(modifiedItems);
   }
 
   const handleOrderBillOrShip = type => {
@@ -20,12 +38,14 @@ const OrderDetailsModal = ({
   };
 
   const footer = [
-    <Button type="primary" onClick={() => handleOrderBillOrShip("bill")}>
-      Return
-    </Button>,
-    <Button type="primary" onClick={() => onOrderBillOrShip("ship")}>
-      Submit
-    </Button>,
+    <StyledButton type="primary" onClick={() => handleOrderBillOrShip("bill")}>
+      <ProfileOutlined />
+      <span>Ready for Billing</span>
+    </StyledButton>,
+    <StyledButton type="primary" onClick={() => onOrderBillOrShip("ship")}>
+      <MailOutlined />
+      <span>Ready for Shipping</span>
+    </StyledButton>,
   ];
 
   const itemColumns = [
@@ -38,7 +58,8 @@ const OrderDetailsModal = ({
       title: 'State  ',
       dataIndex: 'order_state',
       key: 'order_state',
-      render: (status, item) => item.status || status,
+      render: (status, item) => <div style={{background: ITEM_STATUS_BG_COLOR[item.item_state || status], padding: "16px 16px"}}>{item.item_state || status}</div>,
+      className: "status"
     },
   ];
 
@@ -95,7 +116,13 @@ const OrderDetailsModal = ({
 };
 
 const StyledModal = styled(Modal)`
-
+  .ant-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    button + button {
+      background: #275271;
+    }
+  }
 `;
 
 const StyledOrderDetails = styled.div`
@@ -114,8 +141,21 @@ const StyledOrderDetails = styled.div`
   }
   table tbody tr {
     cursor: pointer;
+    .status {
+      padding: 0;
+      font-weight: bold;
+    }
   }
 }
+`;
+
+const StyledButton = styled(Button)`
+  display: flex;
+  align-items: center;
+  height: auto;
+  flex-direction: column;
+  padding: 10px;
+  font-weight: bold;
 `;
 
 export default OrderDetailsModal;

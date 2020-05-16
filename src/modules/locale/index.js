@@ -15,3 +15,9 @@ export const ORDER_STATUS_ENUM = {
   "4": ORDER_STATUS.COMPLETED,
   "5": ORDER_STATUS.CANCELLED
 };
+
+export const ORDER_ITEM_STATUS = [
+  "Added",
+  "Not Available",
+  "Substituted"
+];
