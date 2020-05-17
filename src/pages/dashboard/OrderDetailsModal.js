@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Modal, Collapse, Button, Table } from "antd";
+import { Modal, Collapse, Button, Table, Popover, Spin, Alert } from "antd";
 import styled from "styled-components";
 import moment from "moment";
 import { ProfileOutlined, MailOutlined } from "@ant-design/icons";
 import { ORDER_ITEM_STATUS } from "../../modules/locale";
-
+import ReconcileForm from "./ReconcileForm";
 const { Panel } = Collapse;
 
 const ITEM_STATUS_BG_COLOR = {
@@ -15,11 +15,15 @@ const ITEM_STATUS_BG_COLOR = {
 
 const OrderDetailsModal = ({
   onOrderBillOrShip,
-  order = {},
-  onclose
+  order = {items: []},
+  onclose,
+  error,
+  updatingStatus,
+  clearError
 }) => {
-  const [items, setItems] = useState(order.items);
   const { name, email, phone, pick_up_time, order_date } = order;
+  const [items, setItems] = useState(order.items);
+  const [showReconcileForm, setShowReconcileForm] = useState();
 
   const onOrderItemClick = (item, rowIndex) => {
     const currentStatusIndex = ORDER_ITEM_STATUS.indexOf(item.item_state);
@@ -33,20 +37,58 @@ const OrderDetailsModal = ({
     setItems(modifiedItems);
   }
 
-  const handleOrderBillOrShip = type => {
-
+  const handleOrderBill = () => {
+    const params = {
+      order_id: order.order_id,
+      items: items.map(({item_name, item_state}) => ({item_name, status: item_state})),
+      status_update: "Ready for Billing"
+    };
+    onOrderBillOrShip(params);
   };
 
-  const footer = [
-    <StyledButton type="primary" onClick={() => handleOrderBillOrShip("bill")}>
+  const handleOrderShip = values => {
+    const params = {
+      order_id: order.order_id,
+      items: items.map(({item_name, item_state}) => ({item_name, status: item_state})),
+      status_update: "Ready for Pickup"
+    };
+
+    const { receipt_number, bill_amount, notes } = values;
+    if (receipt_number) {
+      params.receipt_number = `${receipt_number}`;
+    }
+    if (bill_amount) {
+      params.bill_amount = `$${Number.parseFloat(bill_amount).toFixed(2)}`;
+    }
+    if (values.notes) {
+      params.notes = notes;
+    }
+    onOrderBillOrShip(params);
+    hideReconcileForm(false);
+  };
+  const hideReconcileForm = (value) => setShowReconcileForm(value);
+
+  const footer = <>
+    {updatingStatus && <Spin/>}
+    {error && <Alert message="Failed to update order status" type="error" showIcon closable onClose={clearError} />}
+    <StyledButton type="primary" onClick={handleOrderBill} disabled={updatingStatus}>
       <ProfileOutlined />
       <span>Ready for Billing</span>
     </StyledButton>,
-    <StyledButton type="primary" onClick={() => onOrderBillOrShip("ship")}>
-      <MailOutlined />
-      <span>Ready for Shipping</span>
-    </StyledButton>,
-  ];
+    <StyledPopover
+      content={<ReconcileForm onSubmit={handleOrderShip}/>}
+      title="Reconcilation"
+      trigger="click"
+      visible={showReconcileForm}
+      onVisibleChange={hideReconcileForm}
+      getPopupContainer={(triggerNode) => triggerNode.parentNode}
+    >
+      <StyledButton type="primary" onClick={setShowReconcileForm}  disabled={updatingStatus}>
+        <MailOutlined />
+        <span>Ready for Pickup</span>
+      </StyledButton>
+    </StyledPopover></>
+  ;
 
   const itemColumns = [
     {
@@ -56,8 +98,8 @@ const OrderDetailsModal = ({
     },
     {
       title: 'State  ',
-      dataIndex: 'order_state',
-      key: 'order_state',
+      dataIndex: 'item_state',
+      key: 'item_state',
       render: (status, item) => <div style={{background: ITEM_STATUS_BG_COLOR[item.item_state || status], padding: "16px 16px"}}>{item.item_state || status}</div>,
       className: "status"
     },
@@ -105,7 +147,7 @@ const OrderDetailsModal = ({
                 onClick: () => onOrderItemClick(record, rowIndex)
               };
             }}
-            scroll={{handleOrderBillOrShip: true, y: "500px"}}
+            scroll={{handleOrderBillOrShip: true, y: "300px"}}
             bordered
             pagination={false}
           />
@@ -121,6 +163,14 @@ const StyledModal = styled(Modal)`
     justify-content: flex-end;
     button + button {
       background: #275271;
+    }
+    .ant-popover-inner {
+      width: 500px;
+      .ant-popover-title {
+        font-size: 20px;
+        text-align: center;
+        font-weight: bold;
+      }
     }
   }
 `;
@@ -144,6 +194,7 @@ const StyledOrderDetails = styled.div`
     .status {
       padding: 0;
       font-weight: bold;
+      background: grey;
     }
   }
 }
@@ -158,4 +209,7 @@ const StyledButton = styled(Button)`
   font-weight: bold;
 `;
 
+const StyledPopover = styled(Popover)`
+
+`;
 export default OrderDetailsModal;

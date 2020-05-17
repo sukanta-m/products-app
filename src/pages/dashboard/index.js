@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { push } from 'connected-react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styled from "styled-components";
 import { get } from "lodash";
-import { Spin, message, Modal } from "antd";
+import { Spin, message} from "antd";
 
-import { fetchOrder } from "../../modules/actions/dashboard";
+import { fetchOrder, updateOrderStatus, clearError } from "../../modules/actions/dashboard";
 import ItemLists from "./ItemLists";
 import OrderFilter from "./OrderFilter";
 import OrderDetailsModal from "./OrderDetailsModal";
@@ -17,7 +16,11 @@ const Dashboard = ({
   fetchOrder,
   order,
   fetching,
-  error
+  error,
+  updateOrderStatus,
+  updatingStatus,
+  updateError,
+  clearError
 }) => {
   const [searchTxt, setSearchTxt] = useState();
   const [searchBtnValue, setSearchBtnValue] = useState();
@@ -59,7 +62,16 @@ const Dashboard = ({
   return (
     <StyledDashboard>
       {fetching && <Spin/>}
-      {orderId && <OrderDetailsModal order={orderItem} onclose={setOrderId}/>}
+      {orderId && (
+        <OrderDetailsModal
+          order={orderItem}
+          onclose={setOrderId}
+          onOrderBillOrShip={updateOrderStatus}
+          error={updateError}
+          updatingStatus={updatingStatus}
+          clearError={clearError}
+        />
+      )}
       <OrderFilter
         order={order}
         handleSearch={setSearchTxt}
@@ -80,13 +92,17 @@ margin: auto;
 `;
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  fetchOrder
+  fetchOrder,
+  updateOrderStatus,
+  clearError
 }, dispatch)
 
 const mapStateToProps = state => ({
   order: get(state, "dashBoard.order", []),
   fetching: get(state, "dashBoard.fetching", false),
-  error: get(state, "dashBoard.error", false)
+  error: get(state, "dashBoard.error", false),
+  updatingStatus: get(state, "dashBoard.updatingStatus", false),
+  updateError: get(state, "dashBoard.updateError", false)
 });
 
 export default connect(
