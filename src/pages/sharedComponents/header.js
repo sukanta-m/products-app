@@ -18,7 +18,7 @@ const Header = () => {
         <img src="/" alt="Logo"/>
       </div>
       <div className="menu">
-        <div class="topnav" id="myTopnav">
+        <div className="topnav" id="myTopnav">
           <NavLink to="/">Dashboard</NavLink>
         </div>
         <Dropdown overlay={rightMenu}>
