@@ -60,7 +60,7 @@ const Dashboard = ({
   const orderItem = order.find(o => o.order_id === orderId);
 
   return (
-    <StyledDashboard>
+    <StyledDashboard isMobile={window.isMobile}>
       {fetching && <Spin/>}
       {orderId && (
         <OrderDetailsModal
@@ -87,7 +87,7 @@ const Dashboard = ({
 }
 
 const StyledDashboard = styled.div`
-width: 70%;
+width: ${({isMobile}) => isMobile ? "100%" : "70%"};
 margin: auto;
 `;
 

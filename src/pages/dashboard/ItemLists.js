@@ -33,7 +33,8 @@ const ItemLists = ({
       render: (date) => moment(parseInt(date)).format("MMM DD YYYY HH:mm A"),
       sorter: (a, b) => a.order_date - b.order_date,
       sortDirections: ['descend', "ascend"],
-      defaultSortOrder: "descend"
+      defaultSortOrder: "descend",
+      width: 200
     },
     {
       title: 'Name',
@@ -42,6 +43,7 @@ const ItemLists = ({
       width: 600,
       sorter: (a, b) => a.name > b.name,
       sortDirections: ['descend', "ascend"],
+      responsive: window.isMobile? ["md"] : ""
     },
     {
       title: 'Status',
@@ -56,16 +58,18 @@ const ItemLists = ({
       render: (items) => items.length,
       sorter: (a, b) => a.items.length - b.items.length,
       sortDirections: ['descend', "ascend"],
+      responsive: window.isMobile? ["md"] : ""
     },
   ];
   return (
-    <StyledWrapper>
+    <StyledWrapper isMobile={window.isMobile}>
       <Table
         dataSource={data}
         columns={columns}
         pagination={{
-          pageSizeOptions: [10, 20, 30, 40, 50],
-          showSizeChanger: true
+          pageSizeOptions: [5, 10, 20, 50],
+          showSizeChanger: true,
+          defaultPageSize: 5
         }}
         bordered
       />
@@ -75,7 +79,11 @@ const ItemLists = ({
 
 const StyledWrapper = styled.div`
   border: 1px solid #f0f0f0;
-  margin-top: 20px
+  margin-top: 20px;
+  button {
+    width: ${({isMobile}) => isMobile ? "100px" : "100%"};
+    font-size: ${({isMobile}) => isMobile ? "12px" : "14px"};
+  }
 `;
 
 const StyledCartButton = styled(Button)`

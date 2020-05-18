@@ -109,9 +109,10 @@ const OrderDetailsModal = ({
     <StyledModal
       footer={footer}
       visible
-      width={"80%"}
+      width={window.isMobile ? "100%" : "80%"}
       title={`Order Details`}
       onCancel={() => onclose("")}
+      isMobile={window.isMobile}
     >
       <StyledOrderDetails>
         <Collapse accordion bordered={false}>
@@ -158,6 +159,9 @@ const OrderDetailsModal = ({
 };
 
 const StyledModal = styled(Modal)`
+  .ant-modal-body {
+    padding: ${({isMobile}) => isMobile ? "5px" : "24px"};
+  }
   .ant-modal-footer {
     display: flex;
     justify-content: flex-end;
