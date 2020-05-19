@@ -66,7 +66,7 @@ flex-direction: column;
 align-items: flex-end;
 input {
   width: ${({isMobile}) => isMobile ? "95%" : "40%"};
-  margin: auto;
+  margin: ${({isMobile}) => isMobile ? "auto" : "unset"};
 }
 `;
 

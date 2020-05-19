@@ -1,17 +1,9 @@
 import React from "react";
 import { NavLink } from 'react-router-dom';
-import { Menu, Dropdown } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
 import styled from "styled-components";
+import { AmplifySignOut } from "@aws-amplify/ui-react";
 
 const Header = () => {
-  const rightMenu = (
-    <Menu>
-      <Menu.Item key="0">
-        Logout
-      </Menu.Item>
-    </Menu>
-  );
   return (
     <StyledHeader>
       <div>
@@ -21,11 +13,7 @@ const Header = () => {
         <div className="topnav" id="myTopnav">
           <NavLink to="/">Dashboard</NavLink>
         </div>
-        <Dropdown overlay={rightMenu}>
-          <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-            Profile <DownOutlined />
-          </a>
-        </Dropdown>
+        <AmplifySignOut/>
       </div>
     </StyledHeader>
   )
@@ -40,6 +28,9 @@ align-items: center;
 .menu {
   display: flex;
   align-items: center;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
 }
 .topnav {
   overflow: hidden;

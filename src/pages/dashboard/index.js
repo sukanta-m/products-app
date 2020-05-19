@@ -20,14 +20,17 @@ const Dashboard = ({
   updateOrderStatus,
   updatingStatus,
   updateError,
-  clearError
+  clearError,
+  user
 }) => {
   const [searchTxt, setSearchTxt] = useState();
   const [searchBtnValue, setSearchBtnValue] = useState();
   const [orderId, setOrderId] = useState();
   useEffect(() => {
-    fetchOrder(storeId);
-  }, []);
+    if (user) {
+      fetchOrder(user["custom:store_id"]);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (error) {
@@ -35,6 +38,14 @@ const Dashboard = ({
     }
   }, [error]);
 
+  const handleOrderStatusUpdate = (params) => {
+    updateOrderStatus(params).then(r => {
+      if (get(r, "payload.status") === 200) {
+        message.success("Successfully updated");
+        setOrderId("");
+      }
+    })
+  } 
   const getFilteredData = () => {
     let filteredData = order;
 
@@ -66,7 +77,7 @@ const Dashboard = ({
         <OrderDetailsModal
           order={orderItem}
           onclose={setOrderId}
-          onOrderBillOrShip={updateOrderStatus}
+          onOrderBillOrShip={handleOrderStatusUpdate}
           error={updateError}
           updatingStatus={updatingStatus}
           clearError={clearError}
@@ -102,7 +113,8 @@ const mapStateToProps = state => ({
   fetching: get(state, "dashBoard.fetching", false),
   error: get(state, "dashBoard.error", false),
   updatingStatus: get(state, "dashBoard.updatingStatus", false),
-  updateError: get(state, "dashBoard.updateError", false)
+  updateError: get(state, "dashBoard.updateError", false),
+  user: get(state, "auth.user")
 });
 
 export default connect(
