@@ -4,6 +4,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### `export env variables`
+export REACT_APP_HOST_URL=< api host url ><br />
+export REACT_APP_X_API_KEY=<x_api_key><br />
+export REACT_APP_AWS_COGNITO_IDENTITYPOLLID=< aws cognito identity pollid ><br />
+export REACT_APP_AWS_COGNITO_REGION=< aws cognito region ><br />
+export REACT_APP_AWS_USER_POLLID=< aws user pollid ><br />
+export REACT_APP_AWS_USER_POLL_WEB_CLIENTID=< aws user poll web client ><br />
+export REACT_APP_AWS_AUTHENTICATION_FLOW_TYPE=< aws authentication flow type >
+
 ### `yarn start`
 
 Runs the app in the development mode.<br />

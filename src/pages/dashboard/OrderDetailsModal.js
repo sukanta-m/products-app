@@ -165,11 +165,12 @@ const StyledModal = styled(Modal)`
   .ant-modal-footer {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     button + button {
       background: #275271;
     }
     .ant-popover-inner {
-      width: 500px;
+      width: ${({isMobile}) => isMobile ? "250px" : "500px"};
       .ant-popover-title {
         font-size: 20px;
         text-align: center;

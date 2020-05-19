@@ -42,8 +42,7 @@ const ItemLists = ({
       key: 'name',
       width: 600,
       sorter: (a, b) => a.name > b.name,
-      sortDirections: ['descend', "ascend"],
-      responsive: window.isMobile? ["md"] : ""
+      sortDirections: ['descend', "ascend"]
     },
     {
       title: 'Status',
@@ -80,9 +79,17 @@ const ItemLists = ({
 const StyledWrapper = styled.div`
   border: 1px solid #f0f0f0;
   margin-top: 20px;
+  table {
+    td {
+      padding: ${({isMobile}) => isMobile ? "16px 8px" : "16px 8px"};
+    }
+  }
   button {
     width: ${({isMobile}) => isMobile ? "100px" : "100%"};
     font-size: ${({isMobile}) => isMobile ? "12px" : "14px"};
+  }
+  .ant-pagination-options {
+    display: inline-block;
   }
 `;
 

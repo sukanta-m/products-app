@@ -11,7 +11,7 @@ export default (state = initialState, action) => {
     case SIGNIN_SUCCESS:
       return {
         ...state,
-        user: action.payload
+        user: state.user ? {...state.user, ...action.payload} : action.payload
       }
     default:
       return state

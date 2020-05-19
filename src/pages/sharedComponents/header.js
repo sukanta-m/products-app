@@ -1,19 +1,44 @@
 import React from "react";
+import { connect } from 'react-redux'
+import { get } from "lodash";
 import { NavLink } from 'react-router-dom';
 import styled from "styled-components";
-import { AmplifySignOut } from "@aws-amplify/ui-react";
+import { SignOut } from "aws-amplify-react";
+import { MenuOutlined } from "@ant-design/icons";
+import { Menu, Dropdown } from 'antd';
 
-const Header = () => {
+import logo from "../../assets/images/logo.svg";
+
+const menu = (
+  <Menu>
+    <Menu.Item key="0">
+      <NavLink to="/">Dashboard</NavLink>
+    </Menu.Item>
+  </Menu>
+);
+const Header = ({ username }) => {
+  const RenderNavMenuForMobile = () => {
+    if (window.isMobile) {
+      return <Dropdown overlay={menu} trigger={['click']}>
+        <MenuOutlined style={{color: "white"}} />
+      </Dropdown>
+    }
+    return null;
+  }
   return (
-    <StyledHeader>
-      <div>
-        <img src="/" alt="Logo"/>
-      </div>
+    <StyledHeader isMobile={window.isMobile}>
+      <StyledLeftMenu>
+        <RenderNavMenuForMobile/>
+        <img src={logo} alt="Logo" style={{height: window.isMobile ? "30px" : "55px"}}/>
+      </StyledLeftMenu>
       <div className="menu">
-        <div className="topnav" id="myTopnav">
+        {!window.isMobile && <div className="topnav" id="myTopnav">
           <NavLink to="/">Dashboard</NavLink>
-        </div>
-        <AmplifySignOut/>
+        </div>}
+      <StyledRightNav isMobile={window.isMobile}>
+        <span>{username}</span>
+        <SignOut className="signout-link"/>
+      </StyledRightNav>
       </div>
     </StyledHeader>
   )
@@ -22,7 +47,7 @@ const Header = () => {
 const StyledHeader = styled.div`
 display: flex;
 justify-content: space-between;
-padding: 10px 50px;
+padding: ${({isMobile}) => isMobile ? "10px 5px" : "10px 50px"};
 background-color: #333;
 align-items: center;
 .menu {
@@ -88,4 +113,32 @@ align-items: center;
 }
 `;
 
-export default Header;
+const StyledRightNav = styled.div`
+display: flex;
+align-items: center;
+width: 100%;
+justify-content: flex-end;
+span {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+${({isMobile}) => isMobile && `button {
+  min-width: 100px;
+  padding: 5px;
+  span {
+    font-size: 12px;
+  }
+}`}
+`;
+
+const StyledLeftMenu = styled.div`
+display: flex;
+align-items: center;
+justify-content: space-between;
+.anticon-menu {
+  margin-right: 5px;
+}
+`;
+export default connect(state => ({username: get(state, ["auth", "user", "cognito:username"])}), null)(Header);
