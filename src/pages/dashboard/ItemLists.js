@@ -14,7 +14,7 @@ const ItemLists = ({
     {
       title: 'Process',
       dataIndex: 'order_id',
-      key: 'orderId',
+      key: 'order_id',
       render: (orderId, record) => {
         const disabled = [ORDER_STATUS.COMPLETED, ORDER_STATUS.CANCELLED].includes(ORDER_STATUS_ENUM[record.order_status]);
         return (
@@ -29,7 +29,7 @@ const ItemLists = ({
     {
       title: 'Date',
       dataIndex: 'order_date',
-      key: 'date',
+      key: 'order_date',
       render: (date) => moment(parseInt(date)).format("MMM DD YYYY HH:mm A"),
       sorter: (a, b) => a.order_date - b.order_date,
       sortDirections: ['descend', "ascend"],
@@ -47,7 +47,7 @@ const ItemLists = ({
     {
       title: 'Status',
       dataIndex: 'order_status',
-      key: 'status',
+      key: 'order_status',
       render: status => ORDER_STATUS_ENUM[status]
     },
     {
@@ -71,6 +71,7 @@ const ItemLists = ({
           defaultPageSize: 5
         }}
         bordered
+        rowKey="order_id"
       />
     </StyledWrapper>
   )

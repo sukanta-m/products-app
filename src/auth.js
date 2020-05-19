@@ -1,3 +1,4 @@
+import { Auth } from "aws-amplify";
 import { Hub } from "aws-amplify";
 import { get } from "lodash";
 import store from "./store";
@@ -8,10 +9,10 @@ import {
 Hub.listen('auth', (data) => {
   switch (data.payload.event) {
     case 'signIn':
-       store.dispatch({type: SIGNIN_SUCCESS, payload: get(data, "payload.data.attributes")});
+       Auth.currentSession().then(({idToken}) => store.dispatch({ type: SIGNIN_SUCCESS, payload: get(idToken, "payload")}));
       break;
     case 'signIn_failure':
-      this.setState({ authState: 'signIn', authData: null, authError: data.payload.data });
+      store.dispatch({type: SIGNIN_FAILURE, payload: get(data, "payload.data")});
       break;
     case 'signUp':
       console.log('user signed up' + data.payload.data.codeDeliveryDetails.Destination);
@@ -21,7 +22,7 @@ Hub.listen('auth', (data) => {
       console.log('Confirmed sign up')
       break;
     case 'signOut':
-      console.log('user signed out');
+      store.dispatch({type: LOGOUT});
       break;
     case 'signUp_failure':
       console.log('user sign in failed');

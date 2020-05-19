@@ -29,14 +29,18 @@ function App() {
   return (
     <div className="App">
       <Header/>
-      <main>
-        <Route exact path="/" component={Dashboard} />
-      </main>
+      <Authenticator/>
     </div>
   );
 }
 
-export default withAuthenticator(App, true,
+const Router = () => {
+  return  <main>
+  <Route exact path="/" component={Dashboard} />
+  </main>
+};
+
+const Authenticator = withAuthenticator(Router, true,
   [
     <SignIn />,
     <CustomNoSignUp/>,
@@ -45,3 +49,5 @@ export default withAuthenticator(App, true,
     <VerifyContact/>
   ]
 );
+
+export default App;

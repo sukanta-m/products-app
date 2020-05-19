@@ -21,3 +21,5 @@ export const ORDER_ITEM_STATUS = [
   "Not Available",
   "Substituted"
 ];
+
+export const APP_NAME = "Order Processor";

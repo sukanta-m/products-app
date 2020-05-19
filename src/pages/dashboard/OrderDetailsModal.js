@@ -94,14 +94,16 @@ const OrderDetailsModal = ({
     {
       title: 'Item',
       dataIndex: 'item_name',
-      key: 'item_name'
+      key: 'item_name',
+      className: "item_name"
     },
     {
       title: 'State  ',
       dataIndex: 'item_state',
       key: 'item_state',
       render: (status, item) => <div style={{background: ITEM_STATUS_BG_COLOR[item.item_state || status], padding: "16px 16px"}}>{item.item_state || status}</div>,
-      className: "status"
+      className: "status",
+      width: window.isMobile ? "40%" : "20%"
     },
   ];
 
@@ -118,7 +120,7 @@ const OrderDetailsModal = ({
         <Collapse accordion bordered={false}>
           <Panel
             header={`Order Details For ${name} Placed on ${moment(parseInt(order_date)).format("MMM DD YYYY HH:MM A")}`}
-            showArrow={false}
+            showArrow
           >
             <div className="row">
               <span className="title">Name: </span>
@@ -151,6 +153,7 @@ const OrderDetailsModal = ({
             scroll={{handleOrderBillOrShip: true, y: "300px"}}
             bordered
             pagination={false}
+            rowKey="item_name"
           />
         </div>
       </StyledOrderDetails>
@@ -200,6 +203,7 @@ const StyledOrderDetails = styled.div`
       padding: 0;
       font-weight: bold;
       background: grey;
+      width: 20%;
     }
   }
 }

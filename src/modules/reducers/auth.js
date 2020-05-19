@@ -13,6 +13,11 @@ export default (state = initialState, action) => {
         ...state,
         user: state.user ? {...state.user, ...action.payload} : action.payload
       }
+    case LOGOUT:
+      return {
+        ...state,
+        user: null
+      };
     default:
       return state
   }

@@ -8,7 +8,6 @@ const ReconcileForm = ({
   const validateMessages = {
     required: '${label} is required!',
     types: {
-      email: '${label} is not validate email!',
       number: '${label} is not a validate number!',
     }
   };
@@ -20,8 +19,8 @@ const ReconcileForm = ({
       onFinish={onSubmit}
       validateMessages={validateMessages}
     >
-      <Form.Item label="Reciept #" name="receipt_number" rules={[{ type: 'number'}]}>
-        <InputNumber/>
+      <Form.Item label="Reciept #" name="receipt_number">
+        <Input/>
       </Form.Item>
       <Form.Item label="Bill Amt $" name="bill_amount" rules={[{ type: 'number'}]}>
         <InputNumber/>
