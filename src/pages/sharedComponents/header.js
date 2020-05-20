@@ -3,22 +3,24 @@ import { connect } from 'react-redux'
 import { get } from "lodash";
 import { NavLink } from 'react-router-dom';
 import styled from "styled-components";
-import { SignOut, SignIn } from "aws-amplify-react";
+import { Auth } from "aws-amplify";
 import { MenuOutlined } from "@ant-design/icons";
 import { Menu, Dropdown } from 'antd';
 import logo from "../../assets/images/logo.svg";
 import { APP_NAME } from "../../modules/locale";
+import { LogoutOutlined } from "@ant-design/icons";
 
 const menu = (user) => {
   return (
     <Menu>
       <Menu.Item key="0">
-        {user ? <NavLink to="/">Dashboard</NavLink> : <SignIn/>}
+        {user && <NavLink to="/">Dashboard</NavLink>}
       </Menu.Item>
     </Menu>
   );
 };
 const Header = ({ user }) => {
+  const handleSignout = () => Auth.signOut();
   const RenderNavMenuForMobile = () => {
     if (window.isMobile) {
       return <Dropdown overlay={menu(user)} trigger={['click']}>
@@ -36,12 +38,12 @@ const Header = ({ user }) => {
       </StyledLeftMenu>
       <div className="menu">
         {!window.isMobile && <div className="topnav" id="myTopnav">
-          {user ? <NavLink to="/">Dashboard</NavLink> : <SignIn/>}
+          {user && <NavLink to="/">Dashboard</NavLink>}
         </div>}
-        <StyledRightNav isMobile={window.isMobile}>
-          <span>{user && user["cognito:username"]}</span>
-          <SignOut className="signout-link"/>
-        </StyledRightNav>
+        {user && <StyledRightNav isMobile={window.isMobile}>
+          <span>{user["cognito:username"]}</span>
+          <LogoutOutlined onClick={handleSignout}/>
+        </StyledRightNav>}
       </div>
     </StyledHeader>
   )
@@ -65,24 +67,8 @@ align-items: center;
   background-color: #333;
 }
 
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
-
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
 .topnav a.active {
-  background-color: #4CAF50;
-  color: white;
+  text-decoration: underline;
 }
 
 .topnav .icon {

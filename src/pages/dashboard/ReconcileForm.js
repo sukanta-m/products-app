@@ -22,7 +22,7 @@ const ReconcileForm = ({
       <Form.Item label="Reciept #" name="receipt_number">
         <Input/>
       </Form.Item>
-      <Form.Item label="Bill Amt $" name="bill_amount" rules={[{ type: 'number'}]}>
+      <Form.Item label="Total Amount $" name="bill_amount" rules={[{ type: 'number'}]}>
         <InputNumber/>
       </Form.Item>
       <Form.Item label="Notes" name="notes">

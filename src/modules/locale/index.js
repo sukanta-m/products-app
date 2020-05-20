@@ -22,4 +22,4 @@ export const ORDER_ITEM_STATUS = [
   "Substituted"
 ];
 
-export const APP_NAME = "Order Processor";
+export const APP_NAME = "Store Manager";

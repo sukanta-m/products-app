@@ -30,7 +30,14 @@ const ItemLists = ({
       title: 'Date',
       dataIndex: 'order_date',
       key: 'order_date',
-      render: (date) => moment(parseInt(date)).format("MMM DD YYYY HH:mm A"),
+      render: (date) => {
+        return (
+          <div style={{display: "flex", flexDirection: "column"}}>
+            <span>{moment(parseInt(date)).format("ddd MMM DD YYYY")}</span>
+            <span>{moment(parseInt(date)).format("HH:mm A")}</span>
+          </div>
+        )
+      },
       sorter: (a, b) => a.order_date - b.order_date,
       sortDirections: ['descend', "ascend"],
       defaultSortOrder: "descend",
