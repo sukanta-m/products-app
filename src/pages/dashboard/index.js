@@ -9,8 +9,7 @@ import { fetchOrder, updateOrderStatus, clearError } from "../../modules/actions
 import ItemLists from "./ItemLists";
 import OrderFilter from "./OrderFilter";
 import OrderDetailsModal from "./OrderDetailsModal";
-
-const storeId = "18b38a19-42e0-4ecf-9f6a-3b66d969c387";
+import { ORDER_STATUS } from "../../modules/locale";
 
 const Dashboard = ({
   fetchOrder,
@@ -41,6 +40,7 @@ const Dashboard = ({
   const handleOrderStatusUpdate = (params) => {
     updateOrderStatus(params).then(r => {
       if (get(r, "payload.status") === 200) {
+        fetchOrder(user["custom:store_id"]);
         message.success("Successfully updated");
         setOrderId("");
       }
@@ -63,7 +63,12 @@ const Dashboard = ({
     }
 
     if (searchBtnValue) {
-      filteredData = filteredData.filter(d => d.order_status === searchBtnValue);
+      filteredData = filteredData.filter(d => {
+        if (searchBtnValue === "2") {
+          return d.order_status === searchBtnValue || d.order_status.toLowerCase() === ORDER_STATUS.READY_FOR_BILLING.toLowerCase();
+        }
+        return d.order_status === searchBtnValue;
+      });
     }
     return filteredData;
   }
@@ -86,7 +91,7 @@ const Dashboard = ({
       <OrderFilter
         order={order}
         handleSearch={setSearchTxt}
-        onClickSearchBtn={setSearchBtnValue}
+        onClickSearchBtn={value => setSearchBtnValue(value === searchBtnValue ? "" : value)}
         searchBtnValue={searchBtnValue}
       />
       <ItemLists

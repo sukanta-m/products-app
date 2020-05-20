@@ -16,7 +16,6 @@ import { withAuthenticator, SignIn, SignUp, ForgotPassword, RequireNewPassword, 
 
 class CustomNoSignUp extends SignUp {
   render() {
-    console.log(this.props.authState)
     if (this.props.authState !== 'signUp') { return null; }
     return (<div>Please check with your administrator to create a user</div>);
   }

@@ -24,7 +24,6 @@ const OrderDetailsModal = ({
   const { name, email, phone, pick_up_time, order_date } = order;
   const [items, setItems] = useState(order.items);
   const [showReconcileForm, setShowReconcileForm] = useState();
-  const [detailsPanelState, setDetailPanelState] = useState();
 
   const onOrderItemClick = (item, rowIndex) => {
     const currentStatusIndex = ORDER_ITEM_STATUS.indexOf(item.item_state);
@@ -120,7 +119,7 @@ const OrderDetailsModal = ({
       <StyledOrderDetails>
         <Collapse accordion bordered={false}>
           <Panel
-            header={`Order Details For ${name} Placed on ${moment(parseInt(order_date)).format("MMM DD YYYY HH:MM A")}`}
+            header={`Order Details For ${name} Placed on ${moment(parseInt(order_date * 1000)).format("MMM DD YYYY hh:mm A")}`}
             showArrow
           >
             <div className="row">

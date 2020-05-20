@@ -14,10 +14,11 @@ const OrderFilter = ({
 }) => {
   const sortedOrders = orderBy(order, ["order_date"], ["desc"]);
   const counters = sortedOrders.reduce((acc, o) => {
-    if (acc[o.order_status]) {
-      acc[o.order_status] = acc[o.order_status] + 1;
+    const status = o.order_status.toLowerCase();
+    if (acc[status]) {
+      acc[status] = acc[status] + 1;
     } else {
-      acc[o.order_status] = 1;
+      acc[status] = 1;
     }
     return acc;
   }, {});
@@ -34,7 +35,7 @@ const OrderFilter = ({
     <StyledWrapper isMobile={window.isMobile}>
       {firstOrderByDate && lastOrderByDate && (
         <StyledDateRange>
-          <b>From</b> {moment(parseInt(lastOrderByDate.order_date, 10)).format("MMM DD YYYY")} <b>to</b> {moment(parseInt(firstOrderByDate.order_date, 10)).format("MMM DD YYYY")}
+          <b>From</b> {moment(parseInt(lastOrderByDate.order_date, 10) * 1000).format("MMM DD YYYY")} <b>to</b> {moment(parseInt(firstOrderByDate.order_date, 10) * 1000).format("MMM DD YYYY")}
         </StyledDateRange>
       )}
       <StyledButtonGroup>
@@ -47,7 +48,7 @@ const OrderFilter = ({
           <span className="status">{ORDER_STATUS.IN_PROGRESS}</span>
         </StyledButton>
         <StyledButton onClick={() => onClickSearchBtn("2")} style={searchBtnValue === "2" ? activeBtnStyle : {}} isMobile={window.isMobile}>
-          <span className="counter">{counters["2"] || 0}</span>
+          <span className="counter">{(counters["2"] || 0) + (counters[ORDER_STATUS.READY_FOR_BILLING.toLowerCase()] || 0)}</span>
           <span className="status">{ORDER_STATUS.READY_FOR_BILLING}</span>
         </StyledButton>
         <StyledButton onClick={() => onClickSearchBtn("3")} style={searchBtnValue === "3" ? activeBtnStyle : {}} isMobile={window.isMobile}>

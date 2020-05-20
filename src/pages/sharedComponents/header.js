@@ -133,5 +133,8 @@ img {
 .anticon-menu {
   margin-right: 5px;
 }
+@media only screen and (max-width: 1100px) {
+  width: 40%;
+}
 `;
 export default connect(state => ({user: get(state, ["auth", "user"])}), null)(Header);

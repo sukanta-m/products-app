@@ -33,8 +33,8 @@ const ItemLists = ({
       render: (date) => {
         return (
           <div style={{display: "flex", flexDirection: "column"}}>
-            <span>{moment(parseInt(date)).format("ddd MMM DD YYYY")}</span>
-            <span>{moment(parseInt(date)).format("HH:mm A")}</span>
+            <span>{moment(parseInt(date) * 1000).format("ddd MMM DD YYYY")}</span>
+            <span>{moment(parseInt(date) * 1000).format("hh:mm A")}</span>
           </div>
         )
       },
@@ -55,7 +55,7 @@ const ItemLists = ({
       title: 'Status',
       dataIndex: 'order_status',
       key: 'order_status',
-      render: status => ORDER_STATUS_ENUM[status]
+      render: status => ORDER_STATUS_ENUM[status] || status
     },
     {
       title: '#Items',

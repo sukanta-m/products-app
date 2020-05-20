@@ -12,7 +12,7 @@
     "aws-amplify-react": "^4.1.10",
     "axios": "^0.19.2",
     "connected-react-router": "^6.8.0",
-    "dotenv": "^8.2.0",
+    "env-cmd": "^10.1.0",
     "history": "^4.10.1",
     "lodash": "^4.17.15",
     "moment": "^2.25.3",
@@ -26,8 +26,8 @@
     "styled-components": "^5.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "env-cmd -f ./.env react-scripts start",
+    "build": "env-cmd -f ./.env react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
