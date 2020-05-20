@@ -21,7 +21,7 @@ const OrderDetailsModal = ({
   updatingStatus,
   clearError
 }) => {
-  const { name, email, phone, pick_up_time, order_date } = order;
+  const { name, email, phone_number, pick_up_time, order_date } = order;
   const [items, setItems] = useState(order.items);
   const [showReconcileForm, setShowReconcileForm] = useState();
 
@@ -132,11 +132,11 @@ const OrderDetailsModal = ({
             </div>
             <div className="row">
               <span className="title">Phone: </span>
-              <span>{phone}</span>
+              <span>{phone_number}</span>
             </div>
             <div className="row">
               <span className="title">Pick up time: </span>
-              <span>{moment(parseInt(pick_up_time)).format("MMM DD YYYY HH:MM A")}</span>
+              <span>{pick_up_time ? moment(parseInt(pick_up_time) * 1000).format("MMM DD YYYY hh:mm A") : ""}</span>
             </div>
           </Panel>
         </Collapse>
