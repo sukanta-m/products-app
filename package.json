@@ -10,7 +10,7 @@
     "antd": "^4.2.2",
     "aws-amplify": "^3.0.11",
     "aws-amplify-react": "^4.1.10",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "connected-react-router": "^6.8.0",
     "env-cmd": "^10.1.0",
     "history": "^4.10.1",
